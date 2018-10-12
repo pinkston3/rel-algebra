@@ -1,0 +1,97 @@
+-- [Problem 1]
+
+-- An example of schema specification.
+
+R = (a, b, c);
+S = (b, c, d);
+
+-- [Problem 2]
+
+-- Constant relations.
+
+{ (1, "a"), (2, "b"), (3, "c") } ;
+
+r <- { (1, "a", 1.0), (-2, "b", -2.0), (3, "c", 3.0) };
+
+s <- { };
+
+t <- {(1)};
+
+-- [Problem 3]
+
+-- Select examples.
+
+SIGMA[a> 5](r);
+
+SIGMA[a > 5 && b <> 4](s);
+
+SIGMA[a > 5 and b <> 4](t);
+
+-- [Problem 4]
+
+-- Project examples.
+
+PI[b, c](r);
+
+PI[a + 5 AS a_plus_five](r);
+
+-- [Problem 5]
+
+-- Rename examples.
+
+RHO[s](r);
+
+RHO[s(b, c)](r);
+
+-- [Problem 6]
+
+-- Set operations.
+
+r UNION s;
+
+r intersect s;
+
+r MINUS s;
+
+-- [Problem 7a]
+
+-- Cartesian products
+
+r CROSS s;
+r TIMES s;
+
+-- [Problem 7b]
+
+-- Natural joins
+
+r BOWTIE s;
+r LBOWTIE s;
+r RBOWTIE s;
+r FBOWTIE s;
+
+-- [Problem 7c]
+
+-- Theta joins
+
+r BOWTIE[r.a = s.b] s;
+r LBOWTIE[r.a = s.b] s;
+r RBOWTIE[r.a = s.b] s;
+r FBOWTIE[r.a = s.b] s;
+
+-- [Problem 8]
+
+-- Relational division
+
+r DIVIDE s;
+
+-- [Problem 9]
+
+-- Grouping and aggregation
+
+[a, b]GROUP[min(c) AS min_c, max(d) as max_d](r);
+
+
+GROUP[min(c) AS min_c, max(d) as max_d](r);
+
+
+

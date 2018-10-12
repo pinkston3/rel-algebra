@@ -1,0 +1,77 @@
+-- [Problem 1]
+
+-- Names of customers that have either a bank account or a loan at the bank.
+
+PI[cust_name](depositor) UNION PI[cust_name](borrower);
+
+
+-- [Problem 2]
+
+-- Customers with loans at the Seattle branch.  This can be written with a
+-- Cartesian product:
+
+PI[cust_name](SIGMA[borrower.loan_id=loan.loan_id and branch_name="Seattle"(
+    borrower CROSS loan)) ;
+
+-- Here is the same query using a natural join:
+
+PI[cust_name](SIGMA[branch_name="Seattle"(borrower BOWTIE loan));
+
+
+-- [Problem 3]
+
+-- Find the IDs of the loan(s) with the maximum amount.
+
+PI[loan_id](loan) MINUS
+PI[loan.loan_id](SIGMA[loan.amount < test.amount](loan CROSS RHO[test](loan)));
+
+
+-- [Problem 4]
+
+-- Definition of relational division:
+
+temp1 <- PI[R MINUS S](r);
+temp2 <- PI[R MINUS S]((temp1 CROSS s) MINUS PI[R MINUS S, S](r));
+result <- temp1 - temp2;
+
+-- Or, we can just write:
+
+result <- r DIVIDE s;
+
+
+-- [Problem 5]
+
+-- Maximum available credit of any account at the bank.
+
+GROUP[max(available_credit)](
+    PI[(limit - balance) AS available_credit](credit_acct));
+
+
+-- [Problem 6]
+
+-- How many puzzles has each person completed?
+
+[person_name]GROUP[count-distinct(puzzle_name)](completed_times);
+
+-- [Problem 7]
+
+-- How many people have completed each puzzle?  Include puzzles with no
+-- solutions.
+
+[puzzle_name]GROUP[count(person_name)](puzzle_list LBOWTIE completed);
+
+
+-- [Problem 8]
+
+-- Dave has completed all of the same puzzles that Bob has; add Dave to the
+-- puzzle database.  Here is a version using generalized project:
+
+completed <- completed UNION
+PI["Dave" AS person_name, puzzle_name](SIGMA[person_name="Bob"](completed));
+
+-- Or, writing this with a constant relation and Cartesian product:
+
+completed <- completed UNION
+{("Dave")} CROSS PI[puzzle_name](SIGMA[person_name="Bob"](completed));
+
+
